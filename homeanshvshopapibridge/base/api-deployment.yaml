@@ -1,0 +1,72 @@
+#! api-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: api
+    namespace: shopapi
+    labels:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: api
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: shopapi
+            com.docker.compose.service: api
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: shopapi
+                com.docker.compose.service: api
+                com.docker.compose.network.default: "true"
+        spec:
+            containers:
+                - name: shopapi
+                  image: shopapi-api
+                  imagePullPolicy: IfNotPresent
+                  args:
+                    - flask
+                    - --app
+                    - app.main
+                    - run
+                    - --host=0.0.0.0
+                    - --port=5000
+                    - --debug
+                  env:
+                    - name: CACHE_DEFAULT_TIMEOUT
+                      value: "300"
+                    - name: DATABASE_URL
+                      value: "postgresql+psycopg://shopapi:shopapi@postgres:5432/shopapi"
+                    - name: FLASK_DEBUG
+                      value: "true"
+                    - name: GUNICORN_THREADS
+                      value: "4"
+                    - name: GUNICORN_TIMEOUT
+                      value: "60"
+                    - name: GUNICORN_WORKERS
+                      value: "2"
+                    - name: JWT_SECRET_KEY
+                      value: "replace-with-another-long-random-secret"
+                    - name: LOG_LEVEL
+                      value: "INFO"
+                    - name: PAGINATION_DEFAULT
+                      value: "20"
+                    - name: PAGINATION_MAX
+                      value: "100"
+                    - name: REDIS_URL
+                      value: "redis://redis:6379/0"
+                    - name: SECRET_KEY
+                      value: "replace-with-a-long-random-secret"
+                  ports:
+                    - name: api-5000
+                      containerPort: 5000
+                  volumeMounts:
+                    - name: app
+                      mountPath: /app
+            volumes:
+                - name: app
+                  hostPath:
+                    path: /home/anshv/shopapi

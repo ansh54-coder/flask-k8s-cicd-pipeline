@@ -1,0 +1,18 @@
+#! api-expose.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Service
+metadata:
+    name: api
+    namespace: shopapi
+    labels:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: api
+spec:
+    selector:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: api
+    ports:
+        - name: api-5000
+          port: 5000
+          targetPort: api-5000

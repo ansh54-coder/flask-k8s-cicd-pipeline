@@ -1,0 +1,8 @@
+Flask>=3.1,<4
+Flask-SQLAlchemy>=3.1,<4
+Flask-Migrate>=4,<5
+Flask-JWT-Extended>=4.7,<5
+prometheus-flask-exporter>=0.23,<1
+redis>=5,<7
+psycopg[binary]>=3.2,<4
+gunicorn>=23,<24

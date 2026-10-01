@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: shopapi
+  namespace: shopapi
+  labels:
+    app: shopapi
+spec:
+  groups:
+    - name: shopapi.rules
+      rules:
+
+        - alert: ShopAPIHighErrorRate
+          expr: |
+            (
+              sum(rate(flask_http_request_total{
+                status=~"5.."
+              }[5m]))
+              /
+              sum(rate(flask_http_request_total[5m]))
+            ) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "ShopAPI has a high 5xx error rate"
+            description: >
+              More than 5% of requests have returned
+              HTTP 5xx responses for 5 minutes.
+
+        - alert: ShopAPIDown
+          expr: |
+            up{job="shopapi"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "ShopAPI is down"
+            description: >
+              Prometheus cannot scrape the ShopAPI service.

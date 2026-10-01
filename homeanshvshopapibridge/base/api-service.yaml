@@ -1,0 +1,23 @@
+# check if there is at least one published port
+
+#! api-service.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Service
+metadata:
+    name: api-published
+    namespace: shopapi
+    labels:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: api
+spec:
+    selector:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: api
+    ports:
+        - name: api-5000
+          port: 5000
+          protocol: TCP
+          targetPort: api-5000
+
+# check if there is at least one published port

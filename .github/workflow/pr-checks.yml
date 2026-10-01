@@ -1,0 +1,66 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: shopapi
+          POSTGRES_USER: shopapi
+          POSTGRES_PASSWORD: shopapi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U shopapi -d shopapi"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Lint
+        run: |
+          flake8 app tests
+          black --check app tests
+          isort --check-only app tests
+
+      - name: Test
+        env:
+          DATABASE_URL: postgresql+psycopg://shopapi:shopapi@localhost:5432/shopapi
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: test-secret
+          JWT_SECRET_KEY: test-jwt-secret
+        run: |
+          pytest

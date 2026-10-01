@@ -1,0 +1,8 @@
+-r requirements.txt
+
+pytest>=8,<9
+pytest-cov>=6,<7
+flake8>=7,<8
+black>=25,<27
+isort>=6,<7
+pre-commit>=4,<5

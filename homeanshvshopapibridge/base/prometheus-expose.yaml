@@ -1,0 +1,18 @@
+#! prometheus-expose.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Service
+metadata:
+    name: prometheus
+    namespace: shopapi
+    labels:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: prometheus
+spec:
+    selector:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: prometheus
+    ports:
+        - name: prometheus-9090
+          port: 9090
+          targetPort: prometheus-9090

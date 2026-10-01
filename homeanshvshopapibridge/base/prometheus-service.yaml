@@ -1,0 +1,21 @@
+#! prometheus-service.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Service
+metadata:
+    name: prometheus-published
+    namespace: shopapi
+    labels:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: prometheus
+spec:
+    selector:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: prometheus
+    ports:
+        - name: prometheus-9090
+          port: 9090
+          protocol: TCP
+          targetPort: prometheus-9090
+
+# check if there is at least one published port

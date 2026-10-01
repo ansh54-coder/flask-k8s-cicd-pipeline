@@ -1,0 +1,21 @@
+#! postgres-service.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Service
+metadata:
+    name: postgres-published
+    namespace: shopapi
+    labels:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: postgres
+spec:
+    selector:
+        com.docker.compose.project: shopapi
+        com.docker.compose.service: postgres
+    ports:
+        - name: postgres-5432
+          port: 5432
+          protocol: TCP
+          targetPort: postgres-5432
+
+# check if there is at least one published port
